@@ -1,9 +1,11 @@
 *{
     padding: 0px;
-    margin: 0px;
+    margin: 0px auto;
 }
-
-html, body, #app{
-    height: 100%;
-    width: 100%;
+html, body{
+  width: 100%;
+  overflow-x: hidden;
+}
+li{
+  list-style: none;
 }

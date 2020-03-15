@@ -1,29 +1,49 @@
 <template>
   <el-container>
     <el-header>
-        <div class="header_logo">
-          <img src="../assets/logo.png" alt="">
+      <div class="header_logo">
+        <img src="../assets/logo.png" alt />
+      </div>
+      <div class="header_center">
+        <div class="header_nav">
+          <ul>
+            <li>
+              <div class="header_search">
+                <el-input v-model="input" placeholder="请输入内容" size="mini"></el-input>
+              </div>
+            </li>
+            <li>
+              <a href>消息</a>
+            </li>
+            <li>
+              <a href>我的教学</a>
+            </li>
+            <li>
+              <a href>渠道管理</a>
+            </li>
+            <li>
+              <a href>消息</a>
+            </li>
+          </ul>
         </div>
-        <div class="header_center">
-          <div class="header_nav">
-            <ul>
-              <li>
-                  <div class="header_search">
-                    <el-input v-model="input" placeholder="请输入内容" size="mini"></el-input>
-                  </div>
-              </li>
-              <li>消息</li>
-              <li>我的教学</li>
-              <li>渠道管理</li>
-              <li>消息</li>
-            </ul>
-          </div>
-        </div>
-        <div class="header_user">
-          <img src="../assets/logo.png" alt="">
-        </div>
+      </div>
+      <div class="header_user">
+        <img src="../assets/logo.png" alt />
+      </div>
     </el-header>
-    <el-main>Main</el-main>
+    <el-main>
+      <div class="main_carousel">
+        <template>
+          <div>
+            <el-carousel>
+              <el-carousel-item v-for="item in carousel" :key="item.imgUrl">
+                <img :src="item.imgUrl" alt />
+              </el-carousel-item>
+            </el-carousel>
+          </div>
+        </template>
+      </div>
+    </el-main>
     <el-footer>Footer</el-footer>
   </el-container>
 </template>
@@ -33,40 +53,64 @@ export default {
   name: 'Index',
   data () {
     return {
-      input: ''
+      input: '',
+      carousel: []
     }
+  },
+  created () {
+    const that = this
+    this.$http({
+      method: 'get',
+      url: '/Course/getH5CourseBanner'
+    }).then(
+      res => {
+        console.log(res)
+        if (res.data.code === 200) {
+          that.carousel = res.data.data
+          console.log(that.carousel)
+        }
+      },
+      response => {
+        console.log('请求失败')
+        console.log(response)
+      }
+    )
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-.el-header{
-  display:flex;
+.el-header {
+  display: flex;
   /*justify-content:center;*/
   //垂直居中
-  align-items:center;
+  align-items: center;
   padding: 0px;
   margin: 0px;
   background-color: aqua;
-  div{
-    li{
+  div {
+    li {
       display: inline;
+      a {
+        text-decoration: none;
+        color: white;
+      }
     }
-    img{
+    img {
       width: 50px;
       height: auto;
     }
   }
-  .header_center{
+  .header_center {
     display: flex;
     text-align: right;
     color: white;
-    ul{
+    ul {
       width: 85vw;
       display: inline-block;
-      li{
-        .header_search{
+      li {
+        .header_search {
           width: 100px;
           display: inline-block;
         }
@@ -76,9 +120,19 @@ export default {
       }
     }
   }
-  .header_user{
+  .header_user {
     position: absolute;
     right: 1rem;
+  }
+}
+.el-main {
+  background-color: aquamarine;
+  padding: 0;
+  height: 100%;
+  .el-carousel-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
   }
 }
 </style>
